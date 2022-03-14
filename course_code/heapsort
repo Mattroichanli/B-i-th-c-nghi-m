@@ -1,0 +1,55 @@
+#include <iostream>
+#include <fstream>
+#include <time.h>
+using namespace std;
+#define MAX 1000000
+int taoheap(int *a, int n, int i)
+{
+    int goc=i;
+    int la1=2*i+1;
+    int la2=2*i+2;
+    if (la1<n && a[la1]>a[goc]) goc=la1;
+    if (la2<n && a[la2]>a[goc]) goc=la2;
+    if (goc!=i)
+    {
+        swap(a[i],a[goc]);
+        taoheap(a,n,goc);
+    }
+}
+int heap_sort (int *a, int n)
+{
+    for (int i=(n-1)/2-1; i>=0; i--)
+        taoheap(a,n,i);
+    for (int i=n-1; i>0; i--)
+    {
+        swap(a[0],a[i]);
+        taoheap(a,i,0);
+    }
+}
+int main()
+{
+    int n=MAX;
+    clock_t batdau,ketthuc;
+    double thoigian;
+    ifstream filein;
+    filein.open("D:\\Chi\\text.txt",ios_base::in);
+    for (int j=1; j<11; j++)
+    {
+        int *a=new int[MAX];
+        for (int i=0; i<MAX; i++)
+            {
+                int x;
+                filein>>x;
+                a[i]=x;
+            }
+        //for (int i=0; i<MAX; i++) cout<<a[i]<<" "; cout<<endl;
+        batdau=clock();
+        heap_sort(a,n);
+        ketthuc=clock();
+        //for (int i=0; i<MAX; i++) cout<<a[i]<<" "; cout<<endl;
+        thoigian=(double)(ketthuc-batdau)/CLOCKS_PER_SEC;
+        cout<<"text "<<j<<": "<<thoigian*1000<<endl;
+        delete a;
+    }
+    filein.close();
+}
